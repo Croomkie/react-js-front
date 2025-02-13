@@ -1,11 +1,11 @@
-import { Button, Transition } from "@headlessui/react";
-import { jwtDecode } from "jwt-decode";
-import { Formik } from "formik";
-import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import {Button, Transition} from "@headlessui/react";
+import {jwtDecode} from "jwt-decode";
+import {Formik} from "formik";
+import {useNavigate} from "react-router-dom";
+import {useContext, useState} from "react";
 import Icon from "@mdi/react";
-import { mdiCloseCircle, mdiClose } from "@mdi/js";
-import { SocketContext } from "./context/SocketContext.jsx";
+import {mdiCloseCircle, mdiClose} from "@mdi/js";
+import {SocketContext} from "./context/SocketContext.jsx";
 import GameHistory from "./components/GameHistory.jsx";
 
 function App() {
@@ -31,19 +31,15 @@ function App() {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`
             },
-            body: JSON.stringify({ userId: userDecoded.id })
+            body: JSON.stringify({userId: userDecoded.id})
         })
             .then(async (response) => {
                 const data = await response.json();
-                const { gameId } = data;
+                const {gameId} = data;
 
                 // Émettre l'événement "join" avec un objet contenant à la fois gameId et user
-                socket.emit("join", {
-                    gameId,
-                    user: {
-                        id: userDecoded.id,
-                        username: userDecoded.username, // ou le champ correct selon ton JWT
-                    }
+                socket.emit("joinGame", {
+                    gameId, userDecoded
                 });
 
                 // Naviguer vers la page de la partie
@@ -55,11 +51,12 @@ function App() {
 
 
     return (
-        <div style={{ height: "calc(100vh - 64px)" }} className="dark:bg-gray-900">
+        <div style={{height: "calc(100vh - 64px)"}} className="dark:bg-gray-900">
             {sessionStorage.getItem("token") && (
                 <div className="h-screen max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-4 flex flex-col">
                     <div className="flex">
-                        <div className="w-1/2 flex items-center justify-center border-r border-gray-300 dark:border-gray-700">
+                        <div
+                            className="w-1/2 flex items-center justify-center border-r border-gray-300 dark:border-gray-700">
                             <Button
                                 onClick={createParty}
                                 className="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition-colors text-center"
@@ -72,11 +69,12 @@ function App() {
                                 Rejoindre une partie
                             </p>
                             <Formik
-                                initialValues={{ partyCode: "" }}
-                                onSubmit={(values, { setSubmitting }) => {
+                                initialValues={{partyCode: ""}}
+                                onSubmit={(values, {setSubmitting}) => {
                                     setTimeout(() => {
                                         setSubmitting(false);
                                     }, 400);
+                                    const user = jwtDecode(sessionStorage.getItem("token"));
                                     const userId = jwtDecode(sessionStorage.getItem("token")).id;
                                     fetch(`https://react-js-api.onrender.com/game/join/${values.partyCode}`, {
                                         method: "PATCH",
@@ -84,12 +82,13 @@ function App() {
                                             "Content-Type": "application/json",
                                             "Authorization": `Bearer ${sessionStorage.getItem("token")}`
                                         },
-                                        body: JSON.stringify({ userId: userId })
+                                        body: JSON.stringify({userId: userId})
                                     }).then(async (data) => {
                                         const gameData = await data.json();
                                         if (gameData?.id) {
+                                            const gameId = gameData.id;
                                             // Rejoindre la room
-                                            socket.emit("join", gameData.id);
+                                            socket.emit("joinGame", { gameId, user });
                                             navigate(`/game/${gameData.id}`);
                                         } else {
                                             if (gameData.statusCode === 500) {
@@ -105,7 +104,7 @@ function App() {
                                     });
                                 }}
                             >
-                                {({ values, handleChange, handleBlur, handleSubmit }) => (
+                                {({values, handleChange, handleBlur, handleSubmit}) => (
                                     <form onSubmit={handleSubmit} className="flex gap-x-4">
                                         <input
                                             id="partyCode"
@@ -139,11 +138,12 @@ function App() {
                     >
                         <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
                             <Transition show={show}>
-                                <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition">
+                                <div
+                                    className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition">
                                     <div className="p-4">
                                         <div className="flex items-start">
                                             <div className="flex-shrink-0">
-                                                <Icon path={mdiCloseCircle} size={1} className="text-red-500" />
+                                                <Icon path={mdiCloseCircle} size={1} className="text-red-500"/>
                                             </div>
                                             <div className="ml-3 w-0 flex-1 pt-0.5">
                                                 <p className="text-sm font-medium text-gray-900">Erreur</p>
@@ -156,7 +156,7 @@ function App() {
                                                     className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
                                                     <span className="sr-only">Close</span>
-                                                    <Icon path={mdiClose} size={1} />
+                                                    <Icon path={mdiClose} size={1}/>
                                                 </button>
                                             </div>
                                         </div>
@@ -167,7 +167,7 @@ function App() {
                     </div>
 
                     {/* Affichage de l'historique des parties */}
-                    <GameHistory />
+                    <GameHistory/>
                 </div>
             )}
         </div>
