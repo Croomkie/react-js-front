@@ -25,4 +25,6 @@ export const SocketProvider = ({ children }) => {
     );
 };
 
-export const SocketContext = createContext(null);
+export const SocketContext = createContext("https://react-js-api.onrender.com");
+
+
