@@ -5,7 +5,7 @@ const GameHistory = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://35.181.93.121:3000/games", {
+        fetch("https://react-js-api.onrender.com/games", {
             headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}
         })
             .then((res) => res.json())

@@ -17,7 +17,7 @@ function App() {
 
     const createParty = function () {
         const userId = jwtDecode(sessionStorage.getItem("token")).id;
-        fetch("http://35.181.93.121:3000/game", {
+        fetch("https://react-js-api.onrender.com/game", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -58,7 +58,7 @@ function App() {
                                         setSubmitting(false);
                                     }, 400);
                                     const userId = jwtDecode(sessionStorage.getItem("token")).id;
-                                    fetch(`http://35.181.93.121:3000/game/join/${values.partyCode}`, {
+                                    fetch(`https://react-js-api.onrender.com/game/join/${values.partyCode}`, {
                                         method: "PATCH",
                                         headers: {
                                             "Content-Type": "application/json",
