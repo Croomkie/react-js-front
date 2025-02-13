@@ -42,7 +42,7 @@ function App() {
 
                 // Émettre l'événement "join" avec un objet contenant à la fois gameId et user
                 socket.emit("joinGame", {
-                    gameId, userDecoded
+                    gameId, user: userDecoded
                 });
 
                 // Naviguer vers la page de la partie
