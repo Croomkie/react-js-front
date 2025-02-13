@@ -7,6 +7,7 @@ import Icon from "@mdi/react";
 import {mdiCloseCircle, mdiClose} from "@mdi/js";
 import {SocketContext} from "./context/SocketContext.jsx";
 import GameHistory from "./components/GameHistory.jsx";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 function App() {
     const socket = useContext(SocketContext);
@@ -36,6 +37,8 @@ function App() {
             .then(async (response) => {
                 const data = await response.json();
                 const {gameId} = data;
+                console.log("Partie créée avec l'ID :", gameId);
+                console.log("Utilisateur :", userDecoded);
 
                 // Émettre l'événement "join" avec un objet contenant à la fois gameId et user
                 socket.emit("joinGame", {
