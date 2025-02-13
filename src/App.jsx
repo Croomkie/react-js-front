@@ -16,23 +16,43 @@ function App() {
     const navigate = useNavigate();
 
     const createParty = function () {
-        const userId = jwtDecode(sessionStorage.getItem("token")).id;
+        // Décoder le token pour récupérer l'ID et le username
+        const token = sessionStorage.getItem("token");
+        const userDecoded = token ? jwtDecode(token) : null;
+        if (!userDecoded) {
+            console.error("Impossible de créer la partie : pas d'utilisateur.");
+            return;
+        }
+
+        // Faire la requête pour créer la partie
         fetch("https://react-js-api.onrender.com/game", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
             },
-            body: JSON.stringify({
-                userId: userId
+            body: JSON.stringify({ userId: userDecoded.id })
+        })
+            .then(async (response) => {
+                const data = await response.json();
+                const { gameId } = data;
+
+                // Émettre l'événement "join" avec un objet contenant à la fois gameId et user
+                socket.emit("join", {
+                    gameId,
+                    user: {
+                        id: userDecoded.id,
+                        username: userDecoded.username, // ou le champ correct selon ton JWT
+                    }
+                });
+
+                // Naviguer vers la page de la partie
+                navigate(`/game/${gameId}`);
+                localStorage.setItem("currentGameId", gameId);
             })
-        }).then(async (data) => {
-            const { gameId } = await data.json();
-            socket.emit("join", gameId);
-            navigate(`/game/${gameId}`);
-            localStorage.setItem("currentGameId", gameId);
-        });
+            .catch((err) => console.error("Erreur lors de la création de partie :", err));
     };
+
 
     return (
         <div style={{ height: "calc(100vh - 64px)" }} className="dark:bg-gray-900">
