@@ -17,11 +17,11 @@ const Game = () => {
 
     const token = sessionStorage.getItem("token");
     const user = useMemo(() => (token ? jwtDecode(token) : null), [token]);
-    console.log("Joueur actuel", user);
+
 
     useEffect(() => {
         if (!socket || !token || !user) return;
-
+        console.log("Joueur actuel 2", user);
         // Rejoindre la room et demander l'état actuel
         socket.emit("joinGame", { gameId, user });
         console.log("Rejoindre la partie", gameId);
