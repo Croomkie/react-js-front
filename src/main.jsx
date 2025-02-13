@@ -57,10 +57,6 @@ const router = createBrowserRouter([
             {
                 path: '/game/:gameId',
                 element: <Game/>,
-            },
-            {
-                path: '/confirm/:token',
-                element: <ConfirmationSuccess />,
             }
         ],
     },
