@@ -54,38 +54,8 @@ export default function Header() {
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex flex-shrink-0 items-center">
                             <Link to={'/'}>
-                                <img
-                                    alt="Your Company"
-                                    src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                                    className="h-8 w-auto"
-                                />
+                                <p className="text-xl font-bold mb-6 text-gray-700 dark:text-gray-200 text-center mt-6">Home</p>
                             </Link>
-                        </div>
-                        <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <a
-                                href="#"
-                                className="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900 dark:text-gray-100"
-                            >
-                                Dashboard
-                            </a>
-                            <a
-                                href="#"
-                                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-100"
-                            >
-                                Team
-                            </a>
-                            <a
-                                href="#"
-                                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-100"
-                            >
-                                Projects
-                            </a>
-                            <a
-                                href="#"
-                                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-100"
-                            >
-                                Calendar
-                            </a>
                         </div>
                     </div>
                     <div
