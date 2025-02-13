@@ -18,7 +18,8 @@ function Layout() {
 
     return (
         <>
-            {!hideHeaderRoutes.includes(location.pathname) && <Header/>}
+            {!hideHeaderRoutes.some(route => location.pathname.includes(route))
+                && <Header/>}
             <Outlet/>
         </>
     );
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
                 path: '/game/:gameId',
                 element: <Game/>,
             },
+            {
+                path: '/confirm/:token',
+                element: <ConfirmationSuccess />,
+            }
         ],
     },
 ]);
