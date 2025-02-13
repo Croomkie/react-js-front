@@ -14,7 +14,7 @@ import {SocketProvider} from "./context/SocketContext.jsx";
 function Layout() {
     const location = useLocation();
 
-    const hideHeaderRoutes = ['/login', '/register', '/confirmation-success', '/expired-token'];
+    const hideHeaderRoutes = ['login', 'register', 'confirmation-success', 'expired-token'];
 
     return (
         <>
